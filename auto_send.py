@@ -3,8 +3,8 @@ from datetime import datetime
 import time
 from send_chunk import send_story
 
-TARGET_HOUR = 18   # put your PST hour here
-TARGET_MINUTE = 26 # put your PST minute here
+TARGET_HOUR = 10   # put your PST hour here
+TARGET_MINUTE = 28 # put your PST minute here
 
 sent_today = False
 
