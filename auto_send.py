@@ -5,7 +5,7 @@ from send_chunk import send_story
 
 # Railway runs in UTC
 TARGET_HOUR = 18   # 7:30 AM EST = 12:30 UTC
-TARGET_MINUTE = 8
+TARGET_MINUTE = 15
 
 sent_today = False
 
