@@ -3,23 +3,23 @@ from datetime import datetime
 import time
 from send_chunk import send_story
 
-target_hour = 7
-target_minute = 30
+# Railway runs in UTC
+TARGET_HOUR = 15   # 7:30 AM EST = 12:30 UTC
+TARGET_MINUTE = 30
 
 sent_today = False
 
 while True:
-    now = datetime.now()
+    now = datetime.utcnow()
 
-    if now.hour == target_hour and now.minute == target_minute and not sent_today:
+    if now.hour == TARGET_HOUR and now.minute == TARGET_MINUTE and not sent_today:
         asyncio.run(send_story())
         sent_today = True
 
     if now.hour == 0 and now.minute == 0:
         sent_today = False
 
-    time.sleep(5)
-
+    time.sleep(60)
 
 
 

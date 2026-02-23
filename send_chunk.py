@@ -2,7 +2,7 @@ import asyncio
 import os
 from telegram import Bot
 
-BOT_TOKEN = "8580409834:AAFG2FNTN_ir5bAy3XoD_VDNFk4Bx18AVGc"
+BOT_TOKEN = os.environ["BOT_TOKEN"]
 CHAT_ID = -1003503118378
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -32,7 +32,6 @@ def extract_info(filepath):
 
     filename = os.path.splitext(os.path.basename(filepath))[0]
 
-    # Remove leading number like 01_
     parts = filename.split("_", 1)
     if len(parts) > 1:
         filename = parts[1]
