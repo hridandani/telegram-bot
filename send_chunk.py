@@ -3,7 +3,7 @@ import os
 from telegram import Bot
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
-CHAT_ID = -1003738444350
+CHAT_ID = -1003503118378  # change if needed
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROGRESS_FILE = os.path.join(BASE_DIR, "current_story.txt")
@@ -48,9 +48,10 @@ async def send_story():
     if os.path.exists(PROGRESS_FILE):
         with open(PROGRESS_FILE, "r") as f:
             current_index = int(f.read().strip())
-	print("CURRENT INDEX:", current_index)
     else:
         current_index = 0
+
+    print("CURRENT INDEX:", current_index)
 
     if current_index >= len(stories):
         print("All stories sent.")
@@ -73,9 +74,3 @@ async def send_story():
 
 if __name__ == "__main__":
     asyncio.run(send_story())
-
-
-
-
-
-
