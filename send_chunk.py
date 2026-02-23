@@ -1,12 +1,56 @@
 import asyncio
 import os
+import psycopg2
 from telegram import Bot
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
-CHAT_ID = -1003503118378  # change if needed
+CHAT_ID = -1003503118378
+DATABASE_URL = os.environ["DATABASE_URL"]
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROGRESS_FILE = os.path.join(BASE_DIR, "current_story.txt")
+
+
+def get_connection():
+    return psycopg2.connect(DATABASE_URL)
+
+
+def setup_db():
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS story_progress (
+            id SERIAL PRIMARY KEY,
+            story_index INTEGER NOT NULL
+        );
+    """)
+
+    cur.execute("SELECT COUNT(*) FROM story_progress;")
+    if cur.fetchone()[0] == 0:
+        cur.execute("INSERT INTO story_progress (story_index) VALUES (0);")
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+def get_story_index():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT story_index FROM story_progress LIMIT 1;")
+    index = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return index
+
+
+def update_story_index(new_index):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("UPDATE story_progress SET story_index = %s;", (new_index,))
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
 def get_all_stories():
@@ -42,15 +86,12 @@ def extract_info(filepath):
 
 
 async def send_story():
+    setup_db()
+
     bot = Bot(token=BOT_TOKEN)
     stories = get_all_stories()
 
-    if os.path.exists(PROGRESS_FILE):
-        with open(PROGRESS_FILE, "r") as f:
-            current_index = int(f.read().strip())
-    else:
-        current_index = 0
-
+    current_index = get_story_index()
     print("CURRENT INDEX:", current_index)
 
     if current_index >= len(stories):
@@ -68,8 +109,7 @@ async def send_story():
 
     print(f"Sent: {story_path}")
 
-    with open(PROGRESS_FILE, "w") as f:
-        f.write(str(current_index + 1))
+    update_story_index(current_index + 1)
 
 
 if __name__ == "__main__":
