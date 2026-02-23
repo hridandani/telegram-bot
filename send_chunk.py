@@ -48,6 +48,7 @@ async def send_story():
     if os.path.exists(PROGRESS_FILE):
         with open(PROGRESS_FILE, "r") as f:
             current_index = int(f.read().strip())
+	print("CURRENT INDEX:", current_index)
     else:
         current_index = 0
 
