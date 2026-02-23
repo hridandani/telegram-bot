@@ -4,8 +4,8 @@ import time
 from send_chunk import send_story
 
 # 11:09 PM PST = 07:09 UTC
-TARGET_HOUR = 7
-TARGET_MINUTE = 10
+TARGET_HOUR = 15
+TARGET_MINUTE = 0
 
 while True:
     now = datetime.utcnow()
