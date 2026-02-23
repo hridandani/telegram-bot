@@ -3,8 +3,9 @@ from datetime import datetime
 import time
 from send_chunk import send_story
 
-# 11:09 PM PST = 07:09 UTC
-TARGET_HOUR = 15
+# Railway runs in UTC
+# 8:00 AM PST = 16:00 UTC (during standard time)
+TARGET_HOUR = 16
 TARGET_MINUTE = 0
 
 while True:
@@ -12,10 +13,9 @@ while True:
 
     if now.hour == TARGET_HOUR and now.minute == TARGET_MINUTE:
         asyncio.run(send_story())
-        time.sleep(60)  # prevents multiple sends in same minute
+        time.sleep(60)  # prevent double send
 
     time.sleep(5)
-
 
 
 
