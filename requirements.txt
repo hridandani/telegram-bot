@@ -1,4 +1,2 @@
 python-telegram-bot
-pytz
 requests
-psycopg2-binary

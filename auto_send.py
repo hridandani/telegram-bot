@@ -1,28 +1,24 @@
-import asyncio
-from datetime import datetime
 import time
+from datetime import datetime
 from send_chunk import send_story
 
-TARGET_HOUR = 16
+TARGET_HOUR = 16  # 8 AM PST = 16 UTC
 TARGET_MINUTE = 0
 
-print("Worker started")
+print("Worker running...")
 
 while True:
-    try:
-        now = datetime.utcnow()
+    now = datetime.utcnow()
 
-        if now.hour == TARGET_HOUR and now.minute == TARGET_MINUTE:
+    if now.hour == TARGET_HOUR and now.minute == TARGET_MINUTE:
+        try:
             print("Sending story...")
-            asyncio.run(send_story())
-            print("Story sent.")
+            send_story()
+            print("Done.")
             time.sleep(60)
+        except Exception as e:
+            print("Error:", e)
 
-        time.sleep(5)
-
-    except Exception as e:
-        print("ERROR:", e)
-        time.sleep(10)
-
+    time.sleep(5)
 
 
