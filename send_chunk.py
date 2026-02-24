@@ -1,12 +1,11 @@
 import os
-import json
 from telegram import Bot
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
-CHAT_ID = -5192757563
+CHAT_ID = -1003503118378
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROGRESS_FILE = os.path.join(BASE_DIR, "progress.json")
+PROGRESS_FILE = os.path.join(BASE_DIR, "current_story.txt")
 
 
 def get_all_stories():
@@ -26,48 +25,33 @@ def get_all_stories():
     return stories
 
 
-def get_progress():
-    if not os.path.exists(PROGRESS_FILE):
-        return 0
+def send_story():
+    bot = Bot(token=BOT_TOKEN)
+    stories = get_all_stories()
 
-    with open(PROGRESS_FILE, "r") as f:
-        data = json.load(f)
-        return data.get("index", 0)
+    # read current story index
+    if os.path.exists(PROGRESS_FILE):
+        with open(PROGRESS_FILE, "r") as f:
+            current_index = int(f.read().strip())
+    else:
+        current_index = 0
 
+    print("CURRENT INDEX:", current_index)
 
-def save_progress(index):
-    with open(PROGRESS_FILE, "w") as f:
-        json.dump({"index": index}, f)
+    story_path = stories[current_index]
 
-
-def extract_info(filepath):
-    folder_name = os.path.basename(os.path.dirname(filepath))
+    folder_name = os.path.basename(os.path.dirname(story_path))
     chapter_number = folder_name.replace("Chapter_", "")
 
-    filename = os.path.splitext(os.path.basename(filepath))[0]
+    filename = os.path.splitext(os.path.basename(story_path))[0]
     parts = filename.split("_", 1)
     if len(parts) > 1:
         filename = parts[1]
 
     title = filename.replace("_", " ")
 
-    return chapter_number, title
-
-
-def send_story():
-    bot = Bot(token=BOT_TOKEN)
-    stories = get_all_stories()
-
-    current_index = get_progress()
-
-    if current_index >= len(stories):
-        print("All stories sent.")
-        return
-
-    story_path = stories[current_index]
-    chapter_number, title = extract_info(story_path)
-
     message = f"Here are today's pages:\n\nChapter: {chapter_number}\nPrasang: {title}"
+
     bot.send_message(chat_id=CHAT_ID, text=message)
 
     with open(story_path, "rb") as f:
@@ -75,4 +59,6 @@ def send_story():
 
     print("Sent:", story_path)
 
-    save_progress(current_index + 1)
+    # increase index
+    with open(PROGRESS_FILE, "w") as f:
+        f.write(str(current_index + 1))
