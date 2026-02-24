@@ -3,8 +3,8 @@ import asyncio
 from datetime import datetime
 from send_chunk import send_story
 
-TARGET_HOUR = 16
-TARGET_MINUTE = 0
+TARGET_HOUR = 4
+TARGET_MINUTE = 40
 
 while True:
     now = datetime.utcnow()
