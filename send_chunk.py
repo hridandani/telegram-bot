@@ -3,7 +3,7 @@ import json
 from telegram import Bot
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
-CHAT_ID = 6506188551
+CHAT_ID = -5192757563
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROGRESS_FILE = os.path.join(BASE_DIR, "progress.json")
