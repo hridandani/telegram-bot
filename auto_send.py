@@ -3,7 +3,7 @@ from datetime import datetime
 from send_chunk import send_story
 
 TARGET_HOUR = 4   # 8 AM PST (UTC)
-TARGET_MINUTE = 23
+TARGET_MINUTE = 32
 
 print("Worker started")
 
