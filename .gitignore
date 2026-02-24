@@ -1,1 +1,4 @@
-current_story.txt
+venv/
+__pycache__/
+*.pyc
+.env
