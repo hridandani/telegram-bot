@@ -2,7 +2,7 @@ import os
 from telegram import Bot
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
-CHAT_ID = -1003503118378
+CHAT_ID = -5192757563
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROGRESS_FILE = os.path.join(BASE_DIR, "current_story.txt")
