@@ -1,8 +1,9 @@
 import os
+import asyncio
 from telegram import Bot
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
-CHAT_ID = -1003738444350
+CHAT_ID = -1003503118378
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROGRESS_FILE = os.path.join(BASE_DIR, "current_story.txt")
@@ -25,11 +26,10 @@ def get_all_stories():
     return stories
 
 
-def send_story():
+async def send_story():
     bot = Bot(token=BOT_TOKEN)
     stories = get_all_stories()
 
-    # read current story index
     if os.path.exists(PROGRESS_FILE):
         with open(PROGRESS_FILE, "r") as f:
             current_index = int(f.read().strip())
@@ -52,13 +52,12 @@ def send_story():
 
     message = f"Here are today's pages:\n\nChapter: {chapter_number}\nPrasang: {title}"
 
-    bot.send_message(chat_id=CHAT_ID, text=message)
+    await bot.send_message(chat_id=CHAT_ID, text=message)
 
     with open(story_path, "rb") as f:
-        bot.send_document(chat_id=CHAT_ID, document=f)
+        await bot.send_document(chat_id=CHAT_ID, document=f)
 
     print("Sent:", story_path)
 
-    # increase index
     with open(PROGRESS_FILE, "w") as f:
         f.write(str(current_index + 1))
